@@ -6,10 +6,10 @@ module.exports = {
     bookHandler,
     handleAddBook,
     handleDeleteBook,
+    handleUpdate
 };
-const anas =process.env.TEST;
-mongoose.connect(anas, { useNewUrlParser: true, useUnifiedTopology: true });
-// mongodb+srv://anas:NwpDzZgjHlaBy9Gy@cluster0.5h6bp.mongodb.net/myfavariteBook?retryWrites=true&w=majority
+const URL =process.env.MONGO_URL;
+mongoose.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const bookSchema = new mongoose.Schema({
     name: String,
@@ -124,3 +124,19 @@ function handleDeleteBook(req,res){
 
 }
 
+function handleUpdate(req, res) {
+    const { name, description, status, email } = req.body;
+    const index = Number(req.params.index);
+    console.log(name, description, status, email, index);
+    myUserModel.findOne({ email: email }, (err, userData) => {
+      console.log("before splice", userData);
+      userData.books.splice(index, 1, {
+        name: name,
+        description: description,
+        status: status,
+      });
+      console.log("after splice", userData);
+      userData.save();
+      res.send(userData.books);
+    });
+  }

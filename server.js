@@ -14,12 +14,14 @@ const {
     bookHandler,
     handleAddBook,
     handleDeleteBook,
+    handleUpdate
 } = require('./module/seedbook');
 
 //http://localhost:3010/book?email=abed
 server.get('/book', bookHandler)
 server.post('/addbook', handleAddBook);
 server.delete('/deletebook/:index', handleDeleteBook);
+server.put('/updatebook/:index',handleUpdate)
 
 server.get('/', homeHandler);
 
